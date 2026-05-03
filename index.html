@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestão Pessoal</title>
+  <!-- Chama o arquivo de visual -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Menu Lateral -->
+  <div class="sidebar">
+    <h2>Meu Painel</h2>
+    <a href="index.html" class="active">Página Principal</a>
+    <a href="investimentos.html">Investimentos</a>
+  </div>
+
+  <!-- Conteúdo Principal -->
+  <div class="content">
+    <h1>Gestão Pessoal <span class="save-status" id="status-salvamento">Salvo automaticamente</span></h1>
+    
+    <div class="card">
+      <h2>Resumo Financeiro Mensal</h2>
+      <div class="form-group">
+        <label>Receita Total (R$)</label>
+        <input type="number" id="renda" placeholder="Ex: 5000" class="auto-save">
+      </div>
+      <div class="form-group">
+        <label>Despesas Fixas (R$)</label>
+        <input type="number" id="despesas" placeholder="Ex: 2000" class="auto-save">
+      </div>
+      <div class="form-group">
+        <label>Anotações, Metas e Lembretes</label>
+        <textarea id="anotacoes" rows="5" placeholder="Digite suas anotações aqui..." class="auto-save"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chama o arquivo de lógica para salvar sozinho -->
+  <script src="script.js"></script>
+</body>
+</html>
