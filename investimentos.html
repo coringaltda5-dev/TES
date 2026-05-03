@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Investimentos</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Menu Lateral -->
+  <div class="sidebar">
+    <h2>Meu Painel</h2>
+    <a href="index.html">Página Principal</a>
+    <a href="investimentos.html" class="active">Investimentos</a>
+  </div>
+
+  <!-- Conteúdo de Investimentos -->
+  <div class="content">
+    <h1>Carteira de Investimentos <span class="save-status" id="status-salvamento">Salvo automaticamente</span></h1>
+    
+    <div class="inv-grid">
+      <!-- Cartão de Ações -->
+      <div class="card">
+        <h2>Ações</h2>
+        <div class="form-group">
+          <label>Posições (Ticker / Quantidade / Preço)</label>
+          <textarea id="acoes-lista" rows="6" placeholder="Ex: PETR4 - 100 cotas" class="auto-save"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Patrimônio em Ações (R$)</label>
+          <input type="number" id="acoes-total" placeholder="0.00" class="auto-save">
+        </div>
+      </div>
+
+      <!-- Cartão de FIIs -->
+      <div class="card">
+        <h2>Fundos Imobiliários (FIIs)</h2>
+        <div class="form-group">
+          <label>Posições (Ticker / Quantidade / Preço)</label>
+          <textarea id="fiis-lista" rows="6" placeholder="Ex: MXRF11 - 50 cotas" class="auto-save"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Patrimônio em FIIs (R$)</label>
+          <input type="number" id="fiis-total" placeholder="0.00" class="auto-save">
+        </div>
+      </div>
+
+      <!-- Cartão de Cripto -->
+      <div class="card">
+        <h2>Criptomoedas</h2>
+        <div class="form-group">
+          <label>Ativos (Moeda / Quantidade)</label>
+          <textarea id="cripto-lista" rows="6" placeholder="Ex: BTC - 0.05" class="auto-save"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Patrimônio em Cripto (R$ ou U$)</label>
+          <input type="number" id="cripto-total" placeholder="0.00" class="auto-save">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
