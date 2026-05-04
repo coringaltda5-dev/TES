@@ -1,0 +1,60 @@
+/* Estilo do Menu Lateral Moderno */
+#sidebar {
+    width: 250px;
+    background-color: #2c3e50; /* Mesmo azul escuro do topo do seu dash */
+    color: white;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 4px 0 10px rgba(0,0,0,0.3);
+    z-index: 1000;
+}
+
+.sidebar-header {
+    padding: 25px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-align: center;
+    border-bottom: 1px solid #34495e;
+    color: #27ae60; /* Verde do seu botão principal */
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.sidebar-menu li a {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    color: #ecf0f1;
+    text-decoration: none; /* Tira o sublinhado roxo antigo */
+    transition: 0.3s;
+    font-size: 1rem;
+}
+
+.sidebar-menu li a i {
+    margin-right: 15px;
+    width: 20px;
+    text-align: center;
+}
+
+/* Quando passa o mouse ou a página está ativa */
+.sidebar-menu li a:hover, 
+.sidebar-menu li a.active {
+    background: #34495e;
+    color: #27ae60;
+    border-left: 5px solid #27ae60;
+}
+
+/* Ajuste do conteúdo principal para não ficar atrás do menu */
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+    width: calc(100% - 250px);
+}
