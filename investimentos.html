@@ -8,53 +8,54 @@
 </head>
 <body>
 
-  <!-- Menu Lateral -->
   <div class="sidebar">
-    <h2>Meu Painel</h2>
-    <a href="index.html">Página Principal</a>
+    <h2>Gestão Dashboard</h2>
+    <a href="index.html">Painel Principal</a>
     <a href="investimentos.html" class="active">Investimentos</a>
   </div>
 
-  <!-- Conteúdo de Investimentos -->
   <div class="content">
-    <h1>Carteira de Investimentos <span class="save-status" id="status-salvamento">Salvo automaticamente</span></h1>
+    <div class="header-title">
+      <h1>Meus Ativos</h1>
+      <span class="save-status" id="status-salvamento">Sincronizado</span>
+    </div>
     
-    <div class="inv-grid">
-      <!-- Cartão de Ações -->
+    <div class="grid-layout">
+      <!-- Ações -->
       <div class="card">
-        <h2>Ações</h2>
+        <h2>📈 Ações</h2>
         <div class="form-group">
-          <label>Posições (Ticker / Quantidade / Preço)</label>
-          <textarea id="acoes-lista" rows="6" placeholder="Ex: PETR4 - 100 cotas" class="auto-save"></textarea>
+          <label>Posições Abertas</label>
+          <textarea id="acoes-lista" rows="6" placeholder="Ex: ITUB4 - 200 cotas" class="auto-save"></textarea>
         </div>
         <div class="form-group">
-          <label>Patrimônio em Ações (R$)</label>
+          <label>Total Investido (R$)</label>
           <input type="number" id="acoes-total" placeholder="0.00" class="auto-save">
         </div>
       </div>
 
-      <!-- Cartão de FIIs -->
+      <!-- FIIs -->
       <div class="card">
-        <h2>Fundos Imobiliários (FIIs)</h2>
+        <h2>🏢 FIIs</h2>
         <div class="form-group">
-          <label>Posições (Ticker / Quantidade / Preço)</label>
-          <textarea id="fiis-lista" rows="6" placeholder="Ex: MXRF11 - 50 cotas" class="auto-save"></textarea>
+          <label>Meus Fundos</label>
+          <textarea id="fiis-lista" rows="6" placeholder="Ex: HGLG11 - 10 cotas" class="auto-save"></textarea>
         </div>
         <div class="form-group">
-          <label>Patrimônio em FIIs (R$)</label>
+          <label>Total Investido (R$)</label>
           <input type="number" id="fiis-total" placeholder="0.00" class="auto-save">
         </div>
       </div>
 
-      <!-- Cartão de Cripto -->
+      <!-- Cripto -->
       <div class="card">
-        <h2>Criptomoedas</h2>
+        <h2>🪙 Criptomoedas</h2>
         <div class="form-group">
-          <label>Ativos (Moeda / Quantidade)</label>
-          <textarea id="cripto-lista" rows="6" placeholder="Ex: BTC - 0.05" class="auto-save"></textarea>
+          <label>Carteira Cripto</label>
+          <textarea id="cripto-lista" rows="6" placeholder="Ex: BTC - 0.015" class="auto-save"></textarea>
         </div>
         <div class="form-group">
-          <label>Patrimônio em Cripto (R$ ou U$)</label>
+          <label>Total Investido (US$ ou R$)</label>
           <input type="number" id="cripto-total" placeholder="0.00" class="auto-save">
         </div>
       </div>
