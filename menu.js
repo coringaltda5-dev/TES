@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
         menuContainer.innerHTML = `
             <nav id="sidebar">
                 <div class="sidebar-header">
-                    <i class="fas fa-chart-pie"></i> GESTÃO AI
+                    <i class="fas fa-chart-pie"></i> GESTÃO 
                 </div>
                 <ul class="sidebar-menu">
                     <li>
