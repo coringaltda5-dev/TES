@@ -1,27 +1,22 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Investimentos</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-  <!-- A mesma div vazia para o menu -->
-  <div id="menu-container"></div>
-
-  <div class="content">
-    <div class="header-title">
-      <h1>Meus Ativos</h1>
-      <span class="save-status" id="status-salvamento">Sincronizado</span>
+<!-- Exemplo de como ficam os cartões de investimento -->
+<div class="grid-layout">
+  <div class="card">
+    <h2>📈 Ações</h2>
+    <div class="form-group">
+      <label>Total Investido (R$)</label>
+      <input type="number" id="acoes-total" readonly style="background: #f8fafc; font-weight: bold;">
     </div>
-    
-    <!-- Seus cartões de Ações, FIIs e Cripto continuam aqui normalmente... -->
-    
+    <div class="form-group">
+      <label>Novo Aporte</label>
+      <div class="input-with-button">
+        <input type="number" id="valor-acoes" placeholder="0.00">
+        <button class="btn" onclick="lancarMovimentacao('valor-acoes', 'acoes-total', 'hist-acoes', 'somar')">+</button>
+      </div>
+    </div>
+    <div id="lista-acoes"></div>
+    <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
+    <textarea id="acoes-lista" class="auto-save" rows="3" placeholder="Notas sobre ativos..."></textarea>
   </div>
-
-  <script src="menu.js"></script>
-  <script src="script.js"></script>
-</body>
-</html>
+  
+  <!-- Repetir a estrutura acima para FIIs e Cripto, mudando apenas os IDs -->
+</div>
