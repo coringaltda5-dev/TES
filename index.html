@@ -4,40 +4,72 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestão Pessoal</title>
-  <!-- Chama o arquivo de visual -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Menu Lateral -->
   <div class="sidebar">
-    <h2>Meu Painel</h2>
-    <a href="index.html" class="active">Página Principal</a>
+    <h2>Gestão Dashboard</h2>
+    <a href="index.html" class="active">Painel Principal</a>
     <a href="investimentos.html">Investimentos</a>
   </div>
 
-  <!-- Conteúdo Principal -->
   <div class="content">
-    <h1>Gestão Pessoal <span class="save-status" id="status-salvamento">Salvo automaticamente</span></h1>
+    <div class="header-title">
+      <h1>Controle Financeiro</h1>
+      <span class="save-status" id="status-salvamento">Sincronizado</span>
+    </div>
     
-    <div class="card">
-      <h2>Resumo Financeiro Mensal</h2>
-      <div class="form-group">
-        <label>Receita Total (R$)</label>
-        <input type="number" id="renda" placeholder="Ex: 5000" class="auto-save">
+    <div class="grid-layout">
+      <!-- Entradas -->
+      <div class="card">
+        <h2>Entradas e Renda</h2>
+        <div class="form-group">
+          <label>Receita Principal (R$)</label>
+          <input type="number" id="renda" placeholder="0.00" class="auto-save">
+        </div>
+        <div class="form-group">
+          <label>Renda Extra (R$)</label>
+          <input type="number" id="renda-extra" placeholder="0.00" class="auto-save">
+        </div>
       </div>
-      <div class="form-group">
-        <label>Despesas Fixas (R$)</label>
-        <input type="number" id="despesas" placeholder="Ex: 2000" class="auto-save">
-      </div>
-      <div class="form-group">
-        <label>Anotações, Metas e Lembretes</label>
-        <textarea id="anotacoes" rows="5" placeholder="Digite suas anotações aqui..." class="auto-save"></textarea>
+
+      <!-- Despesas Fixas -->
+      <div class="card">
+        <h2>Despesas Fixas</h2>
+        <div class="form-group">
+          <label>Aluguel (R$)</label>
+          <input type="number" id="aluguel" placeholder="0.00" class="auto-save">
+        </div>
+        <div class="form-group">
+          <label>Internet (R$)</label>
+          <input type="number" id="internet" placeholder="0.00" class="auto-save">
+        </div>
+        <div class="form-group">
+          <label>Coisas da Casa (Mercado, etc) (R$)</label>
+          <input type="number" id="coisas-casa" placeholder="0.00" class="auto-save">
+        </div>
       </div>
     </div>
+
+    <!-- Controle Específico -->
+    <div class="card" style="max-width: 500px;">
+      <h2>Manutenção: Bicicleta</h2>
+      <div class="form-group">
+        <label>Orçamento Restante / Saldo (R$)</label>
+        <input type="number" id="saldo-bike" class="auto-save" readonly style="background-color: #f1f5f9; font-weight: bold;">
+      </div>
+      <div class="form-group">
+        <label>Lançar Novo Gasto (R$)</label>
+        <div class="input-with-button">
+          <input type="number" id="gasto-bike" placeholder="Ex: 15.40">
+          <button class="btn" onclick="adicionarGastoBike()">Descontar</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <!-- Chama o arquivo de lógica para salvar sozinho -->
   <script src="script.js"></script>
 </body>
 </html>
