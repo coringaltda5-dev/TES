@@ -5,31 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão AI - Controle de Meta e Bike</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
     <style>
         :root { --primary: #27ae60; --error: #e74c3c; --bike: #3498db; --dark: #2c3e50; --bg: #f4f7f6; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; min-height: 100vh; color: var(--dark); }
-        .main-content { flex: 1; padding: 20px; max-width: 1200px; }
+        .main-content { flex: 1; padding: 20px; max-width: 1200px; margin: auto; }
+        
         .dashboard { background: var(--dark); color: white; padding: 20px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
         .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: center; }
         .full-width { grid-column: span 2; border-top: 1px solid #444; padding-top: 15px; }
         .dash-item span { font-size: 0.75rem; color: #bdc3c7; text-transform: uppercase; }
         .dash-item b { display: block; font-size: 1.2rem; }
+        
         .meta-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .progress-bar { background: #2c3e50; height: 10px; border-radius: 5px; overflow: hidden; }
         .progress-fill { background: var(--primary); height: 100%; width: 0%; transition: 0.5s; }
         .edit-meta { background: none; border: 1px solid #7f8c8d; color: white; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 0.7rem; }
-        .form-box { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        select, input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 1rem; }
-        .btn-add { background: var(--primary); color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
         
-        /* Estilos da Lista e Botão de Apagar */
+        .form-box { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        label { display: block; margin-top: 10px; font-weight: bold; }
+        select, input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 1rem; }
+        .btn-add { background: var(--primary); color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+
+        /* LISTA COM BOTÃO DE REMOVER */
         .item { background: white; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-left: 6px solid #ccc; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .item.bike { border-left-color: var(--bike); }
         .item.casa { border-left-color: #9b59b6; }
-        .valor-txt { font-weight: bold; margin-right: 15px; }
         
-        .item-direita { display: flex; align-items: center; }
+        .item-info small { color: #7f8c8d; }
+        .item-direita { display: flex; align-items: center; gap: 15px; }
+        .valor-txt { font-weight: bold; font-size: 1.1rem; }
         
         .btn-del { 
             background: none; 
@@ -40,13 +44,11 @@
             padding: 5px;
             transition: transform 0.2s;
         }
-        .btn-del:hover { transform: scale(1.2); }
+        .btn-del:hover { transform: scale(1.2); color: #c0392b; }
     </style>
 </head>
 <body>
-
     <div id="menu-container"></div>
-
     <div class="main-content">
         <div class="dashboard">
             <div class="dash-grid">
@@ -76,25 +78,19 @@
                 <option value="bike">🚲 Abater Dívida Bike</option>
                 <option value="casa">🏠 Casa / Internet / Aluguel</option>
             </select>
-
             <label>Tipo</label>
             <select id="tipo">
                 <option value="entrada">Entrada (Dinheiro que entrou +)</option>
                 <option value="saida">Saída (Dinheiro que saiu -)</option>
             </select>
-
             <label>Data e Hora</label>
             <input type="datetime-local" id="dataLancamento">
-
             <input type="text" id="desc" placeholder="Descrição">
             <input type="number" id="valor" step="0.01" placeholder="Valor R$">
-
             <button class="btn-add" onclick="salvar()">REGISTRAR LANÇAMENTO</button>
         </div>
-
         <div class="lista" id="lista"></div>
     </div>
-
     <script src="menu.js"></script>
     <script src="script.js"></script>
 </body>
