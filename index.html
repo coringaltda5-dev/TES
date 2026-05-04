@@ -1,71 +1,29 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestão Pessoal</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+<!-- Dentro da div content do seu index.html -->
+<div class="header-title">
+  <h1>Controle Financeiro</h1>
+  <span class="save-status" id="status-salvamento">Sincronizado</span>
+</div>
 
-  <!-- O Menu vai aparecer automaticamente dentro desta div -->
-  <div id="menu-container"></div>
-
-  <!-- Todo o seu código de Controle Financeiro fica isolado aqui -->
-  <div class="content">
-    <div class="header-title">
-      <h1>Controle Financeiro</h1>
-      <span class="save-status" id="status-salvamento">Sincronizado</span>
+<div class="grid-layout">
+  <div class="card">
+    <h2>Manutenção: Bicicleta</h2>
+    <div class="form-group">
+      <label>Custo Restante (R$)</label>
+      <input type="number" id="saldo-bike" readonly style="background: #f8fafc; font-weight: bold; border: 2px solid #e2e8f0;">
     </div>
-    
-    <div class="grid-layout">
-      <div class="card">
-        <h2>Entradas e Renda</h2>
-        <div class="form-group">
-          <label>Receita Principal (R$)</label>
-          <input type="number" id="renda" placeholder="0.00" class="auto-save">
-        </div>
-        <div class="form-group">
-          <label>Renda Extra (R$)</label>
-          <input type="number" id="renda-extra" placeholder="0.00" class="auto-save">
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>Despesas Fixas</h2>
-        <div class="form-group">
-          <label>Aluguel (R$)</label>
-          <input type="number" id="aluguel" placeholder="0.00" class="auto-save">
-        </div>
-        <div class="form-group">
-          <label>Internet (R$)</label>
-          <input type="number" id="internet" placeholder="0.00" class="auto-save">
-        </div>
-        <div class="form-group">
-          <label>Coisas da Casa (Mercado, etc) (R$)</label>
-          <input type="number" id="coisas-casa" placeholder="0.00" class="auto-save">
-        </div>
+    <div class="form-group">
+      <label>Lançar Ganho (Valor a diminuir)</label>
+      <div class="input-with-button">
+        <input type="number" id="valor-bike" placeholder="0.00">
+        <button class="btn" onclick="lancarMovimentacao('valor-bike', 'saldo-bike', 'hist-bike', 'subtrair')">Lançar</button>
       </div>
     </div>
-
-    <div class="card" style="max-width: 500px;">
-      <h2>Manutenção: Bicicleta</h2>
-      <div class="form-group">
-        <label>Orçamento Restante / Saldo (R$)</label>
-        <input type="number" id="saldo-bike" class="auto-save" readonly style="background-color: #f1f5f9; font-weight: bold;">
-      </div>
-      <div class="form-group">
-        <label>Lançar Novo Gasto (R$)</label>
-        <div class="input-with-button">
-          <input type="number" id="gasto-bike" placeholder="Ex: 15.40">
-          <button class="btn" onclick="adicionarGastoBike()">Descontar</button>
-        </div>
-      </div>
-    </div>
+    <div id="lista-bike" style="margin-top: 10px;"></div>
   </div>
 
-  <!-- Chama o menu primeiro, depois a lógica de salvar -->
-  <script src="menu.js"></script>
-  <script src="script.js"></script>
-</body>
-</html>
+  <div class="card">
+    <h2>Despesas Mensais</h2>
+    <div class="form-group"><label>Aluguel</label><input type="number" id="aluguel" class="auto-save"></div>
+    <div class="form-group"><label>Internet</label><input type="number" id="internet" class="auto-save"></div>
+  </div>
+</div>
