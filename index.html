@@ -5,9 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão AI - Controle de Meta e Bike</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Importante: O CSS externo deve conter as regras da .sidebar enviadas anteriormente -->
+    <link rel="stylesheet" href="style.css">
     <style>
         :root { --primary: #27ae60; --error: #e74c3c; --bike: #3498db; --dark: #2c3e50; --bg: #f4f7f6; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 10px; color: var(--dark); }
+        
+        /* Ajuste para o Layout com Menu Lateral */
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: var(--bg); 
+            margin: 0; 
+            display: flex; /* Permite o menu ao lado do conteúdo */
+            min-height: 100vh;
+            color: var(--dark); 
+        }
+
+        /* Container do Conteúdo Principal */
+        .main-content {
+            flex: 1; /* Ocupa o resto da tela */
+            padding: 20px;
+            max-width: 1200px;
+        }
         
         /* Dashboard de Resultados */
         .dashboard { background: var(--dark); color: white; padding: 20px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
@@ -16,8 +34,7 @@
         .dash-item span { font-size: 0.75rem; color: #bdc3c7; text-transform: uppercase; }
         .dash-item b { display: block; font-size: 1.2rem; }
 
-        /* Meta Editável */
-        .meta-box { background: #34495e; padding: 15px; border-radius: 12px; margin-top: 10px; text-align: left; }
+        /* Meta */
         .meta-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .progress-bar { background: #2c3e50; height: 10px; border-radius: 5px; overflow: hidden; }
         .progress-fill { background: var(--primary); height: 100%; width: 0%; transition: 0.5s; }
@@ -37,126 +54,58 @@
 </head>
 <body>
 
-    <div class="dashboard">
-        <div class="dash-grid">
-            <div class="dash-item">
-                <span>Dívida Restante Bike</span>
-                <b id="dividaBike" style="color: #ff7675;">R$ 1.013,00</b>
-            </div>
-            <div class="dash-item">
-                <span>Saldo Geral Livre</span>
-                <b id="saldoLivre" style="color: #2ecc71;">R$ 0,00</b>
-            </div>
-            
-            <div class="full-width">
-                <div class="meta-header">
-                    <span>Meta de Economia: <b id="valorMetaTxt">R$ 0,00</b></span>
-                    <button class="edit-meta" onclick="editarMeta()">EDITAR META</button>
+    <!-- O MENU SERÁ INJETADO AQUI PELO menu.js -->
+    <div id="menu-container"></div>
+
+    <!-- TODO O CONTEÚDO ATUAL DENTRO DESTA DIV -->
+    <div class="main-content">
+        <div class="dashboard">
+            <div class="dash-grid">
+                <div class="dash-item">
+                    <span>Dívida Restante Bike</span>
+                    <b id="dividaBike" style="color: #ff7675;">R$ 1.013,00</b>
                 </div>
-                <div class="progress-bar">
-                    <div id="progressoMeta" class="progress-fill"></div>
+                <div class="dash-item">
+                    <span>Saldo Geral Livre</span>
+                    <b id="saldoLivre" style="color: #2ecc71;">R$ 0,00</b>
+                </div>
+                
+                <div class="full-width">
+                    <div class="meta-header">
+                        <span>Meta de Economia: <b id="valorMetaTxt">R$ 0,00</b></span>
+                        <button class="edit-meta" onclick="editarMeta()">EDITAR META</button>
+                    </div>
+                    <div class="progress-bar">
+                        <div id="progressoMeta" class="progress-fill"></div>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <div class="form-box">
+            <label>Categoria</label>
+            <select id="categoria">
+                <option value="bike">🚲 Abater Dívida Bike</option>
+                <option value="casa">🏠 Casa / Internet / Aluguel</option>
+            </select>
+
+            <label>Tipo</label>
+            <select id="tipo">
+                <option value="entrada">Entrada (Dinheiro que entrou +)</option>
+                <option value="saida">Saída (Dinheiro que saiu -)</option>
+            </select>
+
+            <input type="text" id="desc" placeholder="Descrição">
+            <input type="number" id="valor" step="0.01" placeholder="Valor R$">
+
+            <button class="btn-add" onclick="salvar()">REGISTRAR LANÇAMENTO</button>
+        </div>
+
+        <div class="lista" id="lista"></div>
     </div>
 
-    <div class="form-box">
-        <label>Categoria</label>
-        <select id="categoria">
-            <option value="bike">🚲 Abater Dívida Bike</option>
-            <option value="casa">🏠 Casa / Internet / Aluguel</option>
-        </select>
-
-        <label>Tipo</label>
-        <select id="tipo">
-            <option value="entrada">Entrada (Dinheiro que entrou +)</option>
-            <option value="saida">Saída (Dinheiro que saiu -)</option>
-        </select>
-
-        <input type="text" id="desc" placeholder="Descrição">
-        <input type="number" id="valor" step="0.01" placeholder="Valor R$">
-
-        <button class="btn-add" onclick="salvar()">REGISTRAR LANÇAMENTO</button>
-    </div>
-
-    <div class="lista" id="lista"></div>
-
-    <script>
-        const DIVIDA_INICIAL_BIKE = 1013.00;
-        let db = JSON.parse(localStorage.getItem('gestao_mestre_v2')) || [];
-        let meta = parseFloat(localStorage.getItem('meta_valor')) || 2000.00;
-
-        function editarMeta() {
-            let novaMeta = prompt("Digite o novo valor da sua meta:", meta);
-            if (novaMeta !== null && !isNaN(novaMeta)) {
-                meta = parseFloat(novaMeta);
-                localStorage.setItem('meta_valor', meta);
-                render();
-            }
-        }
-
-        function salvar() {
-            const cat = document.getElementById('categoria').value;
-            const tipo = document.getElementById('tipo').value;
-            const desc = document.getElementById('desc').value;
-            const val = parseFloat(document.getElementById('valor').value);
-
-            if(!desc || isNaN(val)) return alert("Preencha tudo!");
-
-            const novo = {
-                id: Date.now(), cat, tipo, desc, val,
-                data: new Date().toLocaleDateString('pt-BR')
-            };
-
-            db.push(novo);
-            localStorage.setItem('gestao_mestre_v2', JSON.stringify(db));
-            document.getElementById('desc').value = '';
-            document.getElementById('valor').value = '';
-            render();
-        }
-
-        function render() {
-            const lista = document.getElementById('lista');
-            lista.innerHTML = '';
-            
-            let abatimentoBike = 0;
-            let saldoLivre = 0;
-
-            db.slice().reverse().forEach(item => {
-                // Lógica da Dívida da Bike
-                if(item.cat === 'bike' && item.tipo === 'entrada') {
-                    abatimentoBike += item.val;
-                }
-
-                // Saldo Geral (Ganhos - Gastos)
-                if(item.tipo === 'entrada') saldoLivre += item.val;
-                else saldoLivre -= item.val;
-
-                lista.innerHTML += `
-                    <div class="item ${item.cat === 'bike' ? 'bike' : 'casa'}">
-                        <div>
-                            <small>${item.data}</small><br>
-                            <strong>${item.desc}</strong>
-                        </div>
-                        <div class="valor-txt" style="color: ${item.tipo === 'entrada' ? '#27ae60' : '#e74c3c'}">
-                            ${item.tipo === 'saida' ? '-' : '+'} R$ ${item.val.toFixed(2)}
-                        </div>
-                    </div>
-                `;
-            });
-
-            // Atualiza Painel
-            const dividaAtual = DIVIDA_INICIAL_BIKE - abatimentoBike;
-            document.getElementById('dividaBike').innerText = `R$ ${Math.max(0, dividaAtual).toFixed(2)}`;
-            document.getElementById('saldoLivre').innerText = `R$ ${saldoLivre.toFixed(2)}`;
-            
-            // Atualiza Meta
-            document.getElementById('valorMetaTxt').innerText = `R$ ${meta.toFixed(2)}`;
-            let percentual = (saldoLivre / meta) * 100;
-            document.getElementById('progressoMeta').style.width = `${Math.min(100, Math.max(0, percentual))}%`;
-        }
-
-        window.onload = render;
-    </script>
+    <!-- ORDEM DOS SCRIPTS: Primeiro o Menu, depois a Lógica -->
+    <script src="menu.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
