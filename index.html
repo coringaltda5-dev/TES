@@ -8,12 +8,10 @@
 </head>
 <body>
 
-  <div class="sidebar">
-    <h2>Gestão Dashboard</h2>
-    <a href="index.html" class="active">Painel Principal</a>
-    <a href="investimentos.html">Investimentos</a>
-  </div>
+  <!-- O Menu vai aparecer automaticamente dentro desta div -->
+  <div id="menu-container"></div>
 
+  <!-- Todo o seu código de Controle Financeiro fica isolado aqui -->
   <div class="content">
     <div class="header-title">
       <h1>Controle Financeiro</h1>
@@ -21,7 +19,6 @@
     </div>
     
     <div class="grid-layout">
-      <!-- Entradas -->
       <div class="card">
         <h2>Entradas e Renda</h2>
         <div class="form-group">
@@ -34,7 +31,6 @@
         </div>
       </div>
 
-      <!-- Despesas Fixas -->
       <div class="card">
         <h2>Despesas Fixas</h2>
         <div class="form-group">
@@ -52,7 +48,6 @@
       </div>
     </div>
 
-    <!-- Controle Específico -->
     <div class="card" style="max-width: 500px;">
       <h2>Manutenção: Bicicleta</h2>
       <div class="form-group">
@@ -67,9 +62,10 @@
         </div>
       </div>
     </div>
-
   </div>
 
+  <!-- Chama o menu primeiro, depois a lógica de salvar -->
+  <script src="menu.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
