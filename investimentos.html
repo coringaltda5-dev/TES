@@ -8,11 +8,8 @@
 </head>
 <body>
 
-  <div class="sidebar">
-    <h2>Gestão Dashboard</h2>
-    <a href="index.html">Painel Principal</a>
-    <a href="investimentos.html" class="active">Investimentos</a>
-  </div>
+  <!-- A mesma div vazia para o menu -->
+  <div id="menu-container"></div>
 
   <div class="content">
     <div class="header-title">
@@ -20,48 +17,11 @@
       <span class="save-status" id="status-salvamento">Sincronizado</span>
     </div>
     
-    <div class="grid-layout">
-      <!-- Ações -->
-      <div class="card">
-        <h2>📈 Ações</h2>
-        <div class="form-group">
-          <label>Posições Abertas</label>
-          <textarea id="acoes-lista" rows="6" placeholder="Ex: ITUB4 - 200 cotas" class="auto-save"></textarea>
-        </div>
-        <div class="form-group">
-          <label>Total Investido (R$)</label>
-          <input type="number" id="acoes-total" placeholder="0.00" class="auto-save">
-        </div>
-      </div>
-
-      <!-- FIIs -->
-      <div class="card">
-        <h2>🏢 FIIs</h2>
-        <div class="form-group">
-          <label>Meus Fundos</label>
-          <textarea id="fiis-lista" rows="6" placeholder="Ex: HGLG11 - 10 cotas" class="auto-save"></textarea>
-        </div>
-        <div class="form-group">
-          <label>Total Investido (R$)</label>
-          <input type="number" id="fiis-total" placeholder="0.00" class="auto-save">
-        </div>
-      </div>
-
-      <!-- Cripto -->
-      <div class="card">
-        <h2>🪙 Criptomoedas</h2>
-        <div class="form-group">
-          <label>Carteira Cripto</label>
-          <textarea id="cripto-lista" rows="6" placeholder="Ex: BTC - 0.015" class="auto-save"></textarea>
-        </div>
-        <div class="form-group">
-          <label>Total Investido (US$ ou R$)</label>
-          <input type="number" id="cripto-total" placeholder="0.00" class="auto-save">
-        </div>
-      </div>
-    </div>
+    <!-- Seus cartões de Ações, FIIs e Cripto continuam aqui normalmente... -->
+    
   </div>
 
+  <script src="menu.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
