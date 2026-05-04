@@ -3,152 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão AI - Investimentos</title>
+    <title>Gestão AI - Investimentos Pro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --primary: #27ae60; --investment: #f1c40f; --dark: #2c3e50; --bg: #f4f7f6; }
+        :root { 
+            --primary: #27ae60; 
+            --secondary: #2ecc71;
+            --investment: #f1c40f; 
+            --crypto: #9b59b6;
+            --dark: #1a252f; 
+            --bg: #0f171e; 
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
         
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; min-height: 100vh; color: var(--dark); }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: var(--bg); 
+            margin: 0; 
+            display: flex; 
+            min-height: 100vh; 
+            color: white; 
+        }
 
-        /* --- MENU LATERAL (IGUAL AO INDEX) --- */
+        /* --- MENU LATERAL --- */
         #sidebar {
-            width: 250px; background-color: var(--dark); color: white; height: 100vh;
+            width: 250px; background: #161d24; height: 100vh;
             position: fixed; left: 0; top: 0; display: flex; flex-direction: column;
-            box-shadow: 4px 0 10px rgba(0,0,0,0.3); z-index: 1000;
+            border-right: 1px solid var(--glass-border);
         }
-        .sidebar-header { padding: 25px; font-size: 1.3rem; font-weight: bold; text-align: center; border-bottom: 1px solid #34495e; color: var(--primary); }
-        .sidebar-menu { list-style: none; padding: 0; margin: 20px 0; }
-        .sidebar-menu li a { display: flex; align-items: center; padding: 15px 25px; color: #ecf0f1; text-decoration: none; transition: 0.3s; }
+        .sidebar-header { padding: 30px 20px; font-size: 1.5rem; font-weight: 800; text-align: center; color: var(--primary); letter-spacing: 2px; }
+        .sidebar-menu { list-style: none; padding: 0; margin: 0; }
+        .sidebar-menu li a { display: flex; align-items: center; padding: 18px 25px; color: #a0aec0; text-decoration: none; transition: 0.4s; }
         .sidebar-menu li a i { margin-right: 15px; width: 20px; text-align: center; }
-        .sidebar-menu li a:hover, .sidebar-menu li a.active { background: #34495e; color: var(--primary); border-left: 5px solid var(--primary); }
+        .sidebar-menu li a:hover, .sidebar-menu li a.active { background: var(--glass); color: white; border-left: 4px solid var(--primary); }
 
-        /* --- CONTEÚDO --- */
-        .main-content { flex: 1; padding: 20px; margin-left: 250px; max-width: calc(100% - 250px); }
+        /* --- CONTEÚDO PRINCIPAL --- */
+        .main-content { flex: 1; padding: 30px; margin-left: 250px; max-width: 1200px; }
 
-        .dashboard-invest { 
-            background: var(--dark); color: white; padding: 25px; border-radius: 20px; 
-            margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            text-align: center;
+        .hero-invest { 
+            background: linear-gradient(135deg, #2c3e50, #000000); 
+            padding: 40px; border-radius: 24px; 
+            margin-bottom: 30px; border: 1px solid var(--glass-border);
+            text-align: left; position: relative; overflow: hidden;
         }
-        .total-label { font-size: 0.9rem; color: #bdc3c7; text-transform: uppercase; }
-        .total-valor { display: block; font-size: 2.5rem; color: var(--investment); font-weight: bold; margin-top: 5px; }
+        .hero-invest::after { content: ''; position: absolute; top: -50%; right: -10%; width: 300px; height: 300px; background: var(--primary); filter: blur(150px); opacity: 0.2; }
 
-        .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .card-mini { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: center; }
-        .card-mini span { font-size: 0.8rem; color: #7f8c8d; display: block; }
-        .card-mini b { font-size: 1.2rem; color: var(--dark); }
+        .total-label { font-size: 0.9rem; color: #94a3b8; text-transform: uppercase; font-weight: 600; }
+        .total-valor { display: block; font-size: 3rem; color: white; font-weight: 800; margin-top: 10px; }
 
-        .form-box { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        label { font-weight: bold; display: block; margin-top: 10px; }
-        select, input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 1rem; }
+        .grid-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: var(--glass); padding: 20px; border-radius: 18px; border: 1px solid var(--glass-border); backdrop-filter: blur(10px); }
+        .stat-card span { font-size: 0.8rem; color: #94a3b8; display: block; margin-bottom: 5px; }
+        .stat-card b { font-size: 1.4rem; }
+
+        /* --- FORMULÁRIO MODERNO --- */
+        .form-box { 
+            background: #161d24; padding: 30px; border-radius: 24px; 
+            border: 1px solid var(--glass-border); margin-bottom: 30px;
+        }
+        .input-group { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        select, input { 
+            background: #0f171e; border: 1px solid #2d3748; color: white; 
+            padding: 15px; border-radius: 12px; font-size: 1rem; outline: none; transition: 0.3s;
+        }
+        select:focus, input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.2); }
         
-        .btn-invest { background: var(--investment); color: var(--dark); border: none; width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1rem; }
-        
+        .btn-invest { 
+            background: var(--primary); color: white; border: none; width: 100%; 
+            padding: 18px; border-radius: 12px; font-weight: 700; cursor: pointer; 
+            font-size: 1.1rem; transition: 0.3s;
+        }
+        .btn-invest:hover { background: var(--secondary); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(39, 174, 96, 0.3); }
+
+        /* --- LISTA DE ATIVOS --- */
         .item-invest { 
-            background: white; padding: 15px; border-radius: 12px; display: flex; 
-            justify-content: space-between; align-items: center; margin-bottom: 10px; 
-            border-left: 6px solid var(--investment); box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+            background: var(--glass); padding: 20px; border-radius: 18px; 
+            display: flex; justify-content: space-between; align-items: center; 
+            margin-bottom: 15px; border: 1px solid var(--glass-border);
+            transition: 0.3s;
         }
-        .btn-del { background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 1.2rem; }
+        .item-invest:hover { background: rgba(255,255,255,0.08); transform: scale(1.01); }
+        .asset-info { display: flex; align-items: center; gap: 15px; }
+        .asset-icon { width: 45px; height: 45px; background: var(--bg); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        
+        .badge { padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
+        .badge-fixo { background: rgba(39, 174, 96, 0.2); color: var(--primary); }
+        .badge-variavel { background: rgba(241, 196, 15, 0.2); color: var(--investment); }
+        .badge-crypto { background: rgba(155, 89, 182, 0.2); color: var(--crypto); }
+
+        .btn-del { background: rgba(231, 76, 60, 0.1); border: none; color: #e74c3c; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+        .btn-del:hover { background: #e74c3c; color: white; }
+
+        @media (max-width: 768px) {
+            #sidebar { width: 70px; }
+            .link-text, .sidebar-header { display: none; }
+            .main-content { margin-left: 70px; padding: 15px; }
+            .grid-stats { grid-template-columns: 1fr; }
+            .input-group { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
     <nav id="sidebar">
-        <div class="sidebar-header">GESTÃO AI</div>
+        <div class="sidebar-header">INVEST AI</div>
         <ul class="sidebar-menu">
-            <li><a href="index.html"><i class="fas fa-home"></i> Painel Principal</a></li>
-            <li><a href="investimentos.html" class="active"><i class="fas fa-coins"></i> Investimentos</a></li>
-            <li><a href="config.html"><i class="fas fa-cog"></i> Configurações</a></li>
+            <li><a href="index.html"><i class="fas fa-home"></i> <span class="link-text">Home</span></a></li>
+            <li><a href="investimentos.html" class="active"><i class="fas fa-chart-line"></i> <span class="link-text">Carteira</span></a></li>
+            <li><a href="config.html"><i class="fas fa-wallet"></i> <span class="link-text">Configurações</span></a></li>
         </ul>
     </nav>
 
     <div class="main-content">
-        <div class="dashboard-invest">
-            <span class="total-label">Patrimônio Total Investido</span>
+        <div class="hero-invest">
+            <span class="total-label">Patrimônio Líquido</span>
             <b id="totalInvestido" class="total-valor">R$ 0,00</b>
         </div>
 
-        <div class="cards-grid">
-            <div class="card-mini">
+        <div class="grid-stats">
+            <div class="stat-card">
                 <span>Renda Fixa</span>
-                <b id="totalFixo">R$ 0,00</b>
+                <b id="totalFixo" style="color: var(--primary);">R$ 0,00</b>
             </div>
-            <div class="card-mini">
-                <span>Cripto / Variável</span>
-                <b id="totalVariavel">R$ 0,00</b>
+            <div class="stat-card">
+                <span>Renda Variável</span>
+                <b id="totalVariavel" style="color: var(--investment);">R$ 0,00</b>
+            </div>
+            <div class="stat-card">
+                <span>Criptoativos</span>
+                <b id="totalCrypto" style="color: var(--crypto);">R$ 0,00</b>
             </div>
         </div>
 
         <div class="form-box">
-            <label>Tipo de Investimento</label>
-            <select id="tipoInvest">
-                <option value="fixo">💰 Renda Fixa (CDB, Tesouro)</option>
-                <option value="variavel">🚀 Renda Variável (Ações, Cripto)</option>
-            </select>
-
-            <input type="text" id="ativo" placeholder="Nome do Ativo (Ex: Bitcoin, Nubank)">
-            <input type="number" id="valorInvest" step="0.01" placeholder="Valor R$">
-
-            <button class="btn-invest" onclick="adicionarInvestimento()">APLICAR INVESTIMENTO</button>
+            <div class="input-group">
+                <select id="tipoInvest">
+                    <option value="fixo">💰 Renda Fixa (CDB, LCI, Tesouro)</option>
+                    <option value="variavel">📈 Renda Variável (Ações, FIIs)</option>
+                    <option value="crypto">🪙 Criptoativos (BTC, ETH, etc)</option>
+                </select>
+                <input type="text" id="ativo" placeholder="Ativo (Ex: PETR4)">
+                <input type="number" id="qtd" placeholder="Qtd" step="0.00001">
+            </div>
+            <div class="input-group" style="grid-template-columns: 1fr;">
+                <input type="number" id="valorInvest" step="0.01" placeholder="Preço Médio ou Valor Total R$">
+            </div>
+            <button class="btn-invest" onclick="adicionarInvestimento()">
+                <i class="fas fa-plus-circle"></i> ADICIONAR À CARTEIRA
+            </button>
         </div>
 
         <div id="listaInvestimentos"></div>
     </div>
 
     <script>
-        // Lógica simples para a página de investimentos
-        let investimentos = JSON.parse(localStorage.getItem('gestao_invest')) || [];
+        let investimentos = JSON.parse(localStorage.getItem('gestao_invest_v2')) || [];
 
         function adicionarInvestimento() {
             const tipo = document.getElementById('tipoInvest').value;
-            const ativo = document.getElementById('ativo').value;
-            const valor = parseFloat(document.getElementById('valorInvest').value);
+            const ativo = document.getElementById('ativo').value.toUpperCase();
+            const qtd = parseFloat(document.getElementById('qtd').value) || 1;
+            const preco = parseFloat(document.getElementById('valorInvest').value);
 
-            if (!ativo || isNaN(valor)) return alert("Preencha todos os campos!");
+            if (!ativo || isNaN(preco)) return alert("Dados incompletos!");
 
-            const novo = { id: Date.now(), tipo, ativo, valor, data: new Date().toLocaleDateString('pt-BR') };
+            const totalItem = qtd * preco;
+
+            const novo = { 
+                id: Date.now(), 
+                tipo, 
+                ativo, 
+                qtd, 
+                preco, 
+                totalItem,
+                data: new Date().toLocaleDateString('pt-BR') 
+            };
+
             investimentos.push(novo);
-            localStorage.setItem('gestao_invest', JSON.stringify(investimentos));
+            localStorage.setItem('gestao_invest_v2', JSON.stringify(investimentos));
             
+            // Reset
             document.getElementById('ativo').value = '';
+            document.getElementById('qtd').value = '';
             document.getElementById('valorInvest').value = '';
             render();
         }
 
         function apagarInvest(id) {
-            investimentos = investimentos.filter(i => i.id !== id);
-            localStorage.setItem('gestao_invest', JSON.stringify(investimentos));
-            render();
+            if(confirm("Remover este ativo da carteira?")) {
+                investimentos = investimentos.filter(i => i.id !== id);
+                localStorage.setItem('gestao_invest_v2', JSON.stringify(investimentos));
+                render();
+            }
         }
 
         function render() {
             const lista = document.getElementById('listaInvestimentos');
             lista.innerHTML = '';
-            let total = 0, fixo = 0, variavel = 0;
+            let total = 0, fixo = 0, variavel = 0, crypto = 0;
 
             investimentos.forEach(i => {
-                total += i.valor;
-                if (i.tipo === 'fixo') fixo += i.valor;
-                else variavel += i.valor;
+                total += i.totalItem;
+                if (i.tipo === 'fixo') fixo += i.totalItem;
+                else if (i.tipo === 'variavel') variavel += i.totalItem;
+                else crypto += i.totalItem;
+
+                const icon = i.tipo === 'fixo' ? 'fa-landmark' : (i.tipo === 'crypto' ? 'fa-bitcoin-sign' : 'fa-chart-line');
 
                 lista.innerHTML += `
                     <div class="item-invest">
-                        <div>
-                            <small>${i.data} - ${i.tipo.toUpperCase()}</small><br>
-                            <strong>${i.ativo}</strong>
+                        <div class="asset-info">
+                            <div class="asset-icon"><i class="fas ${icon}"></i></div>
+                            <div>
+                                <span class="badge badge-${i.tipo}">${i.tipo}</span><br>
+                                <strong>${i.ativo}</strong> <small style="color:#94a3b8">(${i.qtd} un)</small>
+                            </div>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 15px;">
-                            <b style="color: #27ae60">R$ ${i.valor.toFixed(2)}</b>
+                        <div style="text-align: right; display: flex; align-items: center; gap: 20px;">
+                            <div>
+                                <small style="display:block; font-size: 0.7rem; color: #94a3b8">VALOR TOTAL</small>
+                                <b style="color: #fff">R$ ${i.totalItem.toFixed(2)}</b>
+                            </div>
                             <button class="btn-del" onclick="apagarInvest(${i.id})"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>
                 `;
             });
 
-            document.getElementById('totalInvestido').innerText = `R$ ${total.toFixed(2)}`;
+            document.getElementById('totalInvestido').innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
             document.getElementById('totalFixo').innerText = `R$ ${fixo.toFixed(2)}`;
             document.getElementById('totalVariavel').innerText = `R$ ${variavel.toFixed(2)}`;
+            document.getElementById('totalCrypto').innerText = `R$ ${crypto.toFixed(2)}`;
         }
 
         render();
