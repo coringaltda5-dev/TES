@@ -5,47 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão AI - Controle de Meta e Bike</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Importante: O CSS externo deve conter as regras da .sidebar enviadas anteriormente -->
     <link rel="stylesheet" href="style.css">
     <style>
         :root { --primary: #27ae60; --error: #e74c3c; --bike: #3498db; --dark: #2c3e50; --bg: #f4f7f6; }
-        
-        /* Ajuste para o Layout com Menu Lateral */
-        body { 
-            font-family: 'Segoe UI', sans-serif; 
-            background: var(--bg); 
-            margin: 0; 
-            display: flex; /* Permite o menu ao lado do conteúdo */
-            min-height: 100vh;
-            color: var(--dark); 
-        }
-
-        /* Container do Conteúdo Principal */
-        .main-content {
-            flex: 1; /* Ocupa o resto da tela */
-            padding: 20px;
-            max-width: 1200px;
-        }
-        
-        /* Dashboard de Resultados */
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; min-height: 100vh; color: var(--dark); }
+        .main-content { flex: 1; padding: 20px; max-width: 1200px; }
         .dashboard { background: var(--dark); color: white; padding: 20px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
         .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: center; }
         .full-width { grid-column: span 2; border-top: 1px solid #444; padding-top: 15px; }
         .dash-item span { font-size: 0.75rem; color: #bdc3c7; text-transform: uppercase; }
         .dash-item b { display: block; font-size: 1.2rem; }
-
-        /* Meta */
         .meta-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .progress-bar { background: #2c3e50; height: 10px; border-radius: 5px; overflow: hidden; }
         .progress-fill { background: var(--primary); height: 100%; width: 0%; transition: 0.5s; }
         .edit-meta { background: none; border: 1px solid #7f8c8d; color: white; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 0.7rem; }
-
-        /* Formulário */
         .form-box { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 20px; }
         select, input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 1rem; }
         .btn-add { background: var(--primary); color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
-
-        /* Lista */
         .item { background: white; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; margin-bottom: 10px; border-left: 6px solid #ccc; }
         .item.bike { border-left-color: var(--bike); }
         .item.casa { border-left-color: #9b59b6; }
@@ -54,10 +30,8 @@
 </head>
 <body>
 
-    <!-- O MENU SERÁ INJETADO AQUI PELO menu.js -->
     <div id="menu-container"></div>
 
-    <!-- TODO O CONTEÚDO ATUAL DENTRO DESTA DIV -->
     <div class="main-content">
         <div class="dashboard">
             <div class="dash-grid">
@@ -69,7 +43,6 @@
                     <span>Saldo Geral Livre</span>
                     <b id="saldoLivre" style="color: #2ecc71;">R$ 0,00</b>
                 </div>
-                
                 <div class="full-width">
                     <div class="meta-header">
                         <span>Meta de Economia: <b id="valorMetaTxt">R$ 0,00</b></span>
@@ -95,6 +68,9 @@
                 <option value="saida">Saída (Dinheiro que saiu -)</option>
             </select>
 
+            <label>Data e Hora</label>
+            <input type="datetime-local" id="dataLancamento">
+
             <input type="text" id="desc" placeholder="Descrição">
             <input type="number" id="valor" step="0.01" placeholder="Valor R$">
 
@@ -104,7 +80,6 @@
         <div class="lista" id="lista"></div>
     </div>
 
-    <!-- ORDEM DOS SCRIPTS: Primeiro o Menu, depois a Lógica -->
     <script src="menu.js"></script>
     <script src="script.js"></script>
 </body>
