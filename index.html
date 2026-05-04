@@ -17,59 +17,12 @@
             color: var(--dark); 
         }
 
-        /* --- ESTILO DO MENU LATERAL --- */
-        #sidebar {
-            width: 250px;
-            background-color: var(--dark);
-            color: white;
-            height: 100vh;
-            position: fixed;
-            left: 0;
-            top: 0;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 4px 0 10px rgba(0,0,0,0.3);
-            z-index: 1000;
-        }
-
-        .sidebar-header {
-            padding: 25px;
-            font-size: 1.3rem;
-            font-weight: bold;
-            text-align: center;
-            border-bottom: 1px solid #34495e;
-            color: var(--primary);
-        }
-
-        .sidebar-menu {
-            list-style: none;
-            padding: 0;
-            margin: 20px 0;
-        }
-
-        .sidebar-menu li a {
-            display: flex;
-            align-items: center;
-            padding: 15px 25px;
-            color: #ecf0f1;
-            text-decoration: none;
-            transition: 0.3s;
-        }
-
-        .sidebar-menu li a i { margin-right: 15px; width: 20px; text-align: center; }
-
-        .sidebar-menu li a:hover {
-            background: #34495e;
-            color: var(--primary);
-            border-left: 5px solid var(--primary);
-        }
-
         /* --- CONTEÚDO PRINCIPAL --- */
         .main-content { 
             flex: 1; 
             padding: 20px; 
-            margin-left: 250px; /* Dá espaço para o menu fixo */
-            max-width: calc(100% - 250px);
+            max-width: 1200px; /* Limitado para não esticar demais em telas grandes */
+            margin: auto; 
         }
 
         .dashboard { background: var(--dark); color: white; padding: 20px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
@@ -83,8 +36,9 @@
         .edit-meta { background: none; border: 1px solid #7f8c8d; color: white; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 0.7rem; }
         
         .form-box { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        label { display: block; margin-top: 10px; font-weight: bold; }
         select, input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 1rem; }
-        .btn-add { background: var(--primary); color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .btn-add { background: var(--primary); color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
         
         .item { background: white; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-left: 6px solid #ccc; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .item.bike { border-left-color: var(--bike); }
@@ -96,16 +50,6 @@
     </style>
 </head>
 <body>
-
-    <!-- Menu Lateral fixo -->
-    <nav id="sidebar">
-        <div class="sidebar-header">GESTÃO AI</div>
-        <ul class="sidebar-menu">
-            <li><a href="index.html"><i class="fas fa-home"></i> Painel Principal</a></li>
-            <li><a href="investimentos.html"><i class="fas fa-coins"></i> Investimentos</a></li>
-            <li><a href="config.html"><i class="fas fa-cog"></i> Configurações</a></li>
-        </ul>
-    </nav>
 
     <div class="main-content">
         <div class="dashboard">
