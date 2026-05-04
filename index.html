@@ -1,29 +1,162 @@
-<!-- Dentro da div content do seu index.html -->
-<div class="header-title">
-  <h1>Controle Financeiro</h1>
-  <span class="save-status" id="status-salvamento">Sincronizado</span>
-</div>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão AI - Controle de Meta e Bike</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #27ae60; --error: #e74c3c; --bike: #3498db; --dark: #2c3e50; --bg: #f4f7f6; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 10px; color: var(--dark); }
+        
+        /* Dashboard de Resultados */
+        .dashboard { background: var(--dark); color: white; padding: 20px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: center; }
+        .full-width { grid-column: span 2; border-top: 1px solid #444; padding-top: 15px; }
+        .dash-item span { font-size: 0.75rem; color: #bdc3c7; text-transform: uppercase; }
+        .dash-item b { display: block; font-size: 1.2rem; }
 
-<div class="grid-layout">
-  <div class="card">
-    <h2>Manutenção: Bicicleta</h2>
-    <div class="form-group">
-      <label>Custo Restante (R$)</label>
-      <input type="number" id="saldo-bike" readonly style="background: #f8fafc; font-weight: bold; border: 2px solid #e2e8f0;">
-    </div>
-    <div class="form-group">
-      <label>Lançar Ganho (Valor a diminuir)</label>
-      <div class="input-with-button">
-        <input type="number" id="valor-bike" placeholder="0.00">
-        <button class="btn" onclick="lancarMovimentacao('valor-bike', 'saldo-bike', 'hist-bike', 'subtrair')">Lançar</button>
-      </div>
-    </div>
-    <div id="lista-bike" style="margin-top: 10px;"></div>
-  </div>
+        /* Meta Editável */
+        .meta-box { background: #34495e; padding: 15px; border-radius: 12px; margin-top: 10px; text-align: left; }
+        .meta-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .progress-bar { background: #2c3e50; height: 10px; border-radius: 5px; overflow: hidden; }
+        .progress-fill { background: var(--primary); height: 100%; width: 0%; transition: 0.5s; }
+        .edit-meta { background: none; border: 1px solid #7f8c8d; color: white; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 0.7rem; }
 
-  <div class="card">
-    <h2>Despesas Mensais</h2>
-    <div class="form-group"><label>Aluguel</label><input type="number" id="aluguel" class="auto-save"></div>
-    <div class="form-group"><label>Internet</label><input type="number" id="internet" class="auto-save"></div>
-  </div>
-</div>
+        /* Formulário */
+        .form-box { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        select, input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 1rem; }
+        .btn-add { background: var(--primary); color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+
+        /* Lista */
+        .item { background: white; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; margin-bottom: 10px; border-left: 6px solid #ccc; }
+        .item.bike { border-left-color: var(--bike); }
+        .item.casa { border-left-color: #9b59b6; }
+        .valor-txt { font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard">
+        <div class="dash-grid">
+            <div class="dash-item">
+                <span>Dívida Restante Bike</span>
+                <b id="dividaBike" style="color: #ff7675;">R$ 1.013,00</b>
+            </div>
+            <div class="dash-item">
+                <span>Saldo Geral Livre</span>
+                <b id="saldoLivre" style="color: #2ecc71;">R$ 0,00</b>
+            </div>
+            
+            <div class="full-width">
+                <div class="meta-header">
+                    <span>Meta de Economia: <b id="valorMetaTxt">R$ 0,00</b></span>
+                    <button class="edit-meta" onclick="editarMeta()">EDITAR META</button>
+                </div>
+                <div class="progress-bar">
+                    <div id="progressoMeta" class="progress-fill"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-box">
+        <label>Categoria</label>
+        <select id="categoria">
+            <option value="bike">🚲 Abater Dívida Bike</option>
+            <option value="casa">🏠 Casa / Internet / Aluguel</option>
+        </select>
+
+        <label>Tipo</label>
+        <select id="tipo">
+            <option value="entrada">Entrada (Dinheiro que entrou +)</option>
+            <option value="saida">Saída (Dinheiro que saiu -)</option>
+        </select>
+
+        <input type="text" id="desc" placeholder="Descrição">
+        <input type="number" id="valor" step="0.01" placeholder="Valor R$">
+
+        <button class="btn-add" onclick="salvar()">REGISTRAR LANÇAMENTO</button>
+    </div>
+
+    <div class="lista" id="lista"></div>
+
+    <script>
+        const DIVIDA_INICIAL_BIKE = 1013.00;
+        let db = JSON.parse(localStorage.getItem('gestao_mestre_v2')) || [];
+        let meta = parseFloat(localStorage.getItem('meta_valor')) || 2000.00;
+
+        function editarMeta() {
+            let novaMeta = prompt("Digite o novo valor da sua meta:", meta);
+            if (novaMeta !== null && !isNaN(novaMeta)) {
+                meta = parseFloat(novaMeta);
+                localStorage.setItem('meta_valor', meta);
+                render();
+            }
+        }
+
+        function salvar() {
+            const cat = document.getElementById('categoria').value;
+            const tipo = document.getElementById('tipo').value;
+            const desc = document.getElementById('desc').value;
+            const val = parseFloat(document.getElementById('valor').value);
+
+            if(!desc || isNaN(val)) return alert("Preencha tudo!");
+
+            const novo = {
+                id: Date.now(), cat, tipo, desc, val,
+                data: new Date().toLocaleDateString('pt-BR')
+            };
+
+            db.push(novo);
+            localStorage.setItem('gestao_mestre_v2', JSON.stringify(db));
+            document.getElementById('desc').value = '';
+            document.getElementById('valor').value = '';
+            render();
+        }
+
+        function render() {
+            const lista = document.getElementById('lista');
+            lista.innerHTML = '';
+            
+            let abatimentoBike = 0;
+            let saldoLivre = 0;
+
+            db.slice().reverse().forEach(item => {
+                // Lógica da Dívida da Bike
+                if(item.cat === 'bike' && item.tipo === 'entrada') {
+                    abatimentoBike += item.val;
+                }
+
+                // Saldo Geral (Ganhos - Gastos)
+                if(item.tipo === 'entrada') saldoLivre += item.val;
+                else saldoLivre -= item.val;
+
+                lista.innerHTML += `
+                    <div class="item ${item.cat === 'bike' ? 'bike' : 'casa'}">
+                        <div>
+                            <small>${item.data}</small><br>
+                            <strong>${item.desc}</strong>
+                        </div>
+                        <div class="valor-txt" style="color: ${item.tipo === 'entrada' ? '#27ae60' : '#e74c3c'}">
+                            ${item.tipo === 'saida' ? '-' : '+'} R$ ${item.val.toFixed(2)}
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Atualiza Painel
+            const dividaAtual = DIVIDA_INICIAL_BIKE - abatimentoBike;
+            document.getElementById('dividaBike').innerText = `R$ ${Math.max(0, dividaAtual).toFixed(2)}`;
+            document.getElementById('saldoLivre').innerText = `R$ ${saldoLivre.toFixed(2)}`;
+            
+            // Atualiza Meta
+            document.getElementById('valorMetaTxt').innerText = `R$ ${meta.toFixed(2)}`;
+            let percentual = (saldoLivre / meta) * 100;
+            document.getElementById('progressoMeta').style.width = `${Math.min(100, Math.max(0, percentual))}%`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>
