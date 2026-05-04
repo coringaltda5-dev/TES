@@ -1,86 +1,130 @@
+// script.js
 document.addEventListener('DOMContentLoaded', () => {
-  const inputs = document.querySelectorAll('.auto-save');
-  const statusText = document.getElementById('status-salvamento');
+    const statusText = document.getElementById('status-salvamento');
+    const DIVIDA_INICIAL_BIKE = 1013.00;
 
-  // Inicializa o custo fixo da bicicleta se for o primeiro acesso
-  if (!localStorage.getItem('saldo-bike')) {
-    localStorage.setItem('saldo-bike', "1013.00");
-  }
+    // Inicializa Banco de Dados e Meta
+    let db = JSON.parse(localStorage.getItem('gestao_mestre_v2')) || [];
+    let meta = parseFloat(localStorage.getItem('meta_valor')) || 2000.00;
 
-  // Carrega valores simples e atualiza a tela
-  inputs.forEach(input => {
-    const savedValue = localStorage.getItem(input.id);
-    if (savedValue !== null) input.value = savedValue;
-  });
-  
-  atualizarInterface();
+    // Funções de Interface
+    window.editarMeta = function() {
+        let novaMeta = prompt("Digite o novo valor da sua meta:", meta);
+        if (novaMeta !== null && !isNaN(novaMeta) && novaMeta > 0) {
+            meta = parseFloat(novaMeta);
+            localStorage.setItem('meta_valor', meta);
+            render();
+        }
+    };
 
-  // Salva campos de texto automaticamente
-  inputs.forEach(input => {
-    input.addEventListener('input', () => {
-      localStorage.setItem(input.id, input.value);
-      mostrarAvisoSalvo();
-    });
-  });
+    window.salvar = function() {
+        const cat = document.getElementById('categoria').value;
+        const tipo = document.getElementById('tipo').value;
+        const desc = document.getElementById('desc').value;
+        const valInput = document.getElementById('valor');
+        const val = parseFloat(valInput.value);
 
-  // FUNÇÃO PARA LANÇAR GANHOS OU INVESTIMENTOS
-  window.lancarMovimentacao = function(idCampoValor, idSaldo, listaKey, tipo) {
-    const inputValor = document.getElementById(idCampoValor);
-    const valor = parseFloat(inputValor.value.replace(',', '.'));
+        if (!desc || isNaN(val)) return alert("Preencha a descrição e o valor!");
 
-    if (isNaN(valor) || valor <= 0) return;
+        const novo = {
+            id: Date.now(),
+            cat,
+            tipo,
+            desc,
+            val,
+            data: new Date().toLocaleDateString('pt-BR'),
+            hora: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+        };
 
-    let saldoAtual = parseFloat(localStorage.getItem(idSaldo) || 0);
-    
-    // Se tipo for 'subtrair' (Bike), o ganho diminui o custo.
-    // Se for 'somar' (Investimentos), o valor aumenta o total.
-    let novoSaldo = (tipo === 'subtrair') ? saldoAtual - valor : saldoAtual + valor;
-    
-    localStorage.setItem(idSaldo, novoSaldo.toFixed(2));
+        db.push(novo);
+        localStorage.setItem('gestao_mestre_v2', JSON.stringify(db));
+        
+        // Limpa campos
+        document.getElementById('desc').value = '';
+        valInput.value = '';
+        
+        render();
+        mostrarAvisoSalvo();
+    };
 
-    // Salva no Histórico (Lista)
-    const historico = JSON.parse(localStorage.getItem(listaKey) || "[]");
-    historico.unshift({
-      valor: valor.toFixed(2),
-      data: new Date().toLocaleDateString('pt-BR'),
-      hora: new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})
-    });
-    localStorage.setItem(listaKey, JSON.stringify(historico.slice(0, 5))); // Salva os últimos 5
+    function render() {
+        const lista = document.getElementById('lista');
+        if (!lista) return;
 
-    inputValor.value = '';
-    atualizarInterface();
-    mostrarAvisoSalvo();
-  };
+        lista.innerHTML = '';
+        let abatimentoBike = 0;
+        let saldoLivre = 0;
 
-  function atualizarInterface() {
-    const ids = ['saldo-bike', 'acoes-total', 'fiis-total', 'cripto-total'];
-    ids.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.value = localStorage.getItem(id) || "0.00";
-    });
+        // Processa os dados (do mais novo para o mais antigo)
+        db.slice().reverse().forEach(item => {
+            // Lógica de abatimento da Bike (Entradas na categoria bike diminuem a dívida)
+            if (item.cat === 'bike' && item.tipo === 'entrada') {
+                abatimentoBike += item.val;
+            }
 
-    renderizarLista('lista-bike', 'hist-bike');
-    renderizarLista('lista-acoes', 'hist-acoes');
-    renderizarLista('lista-fiis', 'hist-fiis');
-    renderizarLista('lista-cripto', 'hist-cripto');
-  }
+            // Cálculo do Saldo Geral Livre
+            if (item.tipo === 'entrada') {
+                saldoLivre += item.val;
+            } else {
+                saldoLivre -= item.val;
+            }
 
-  function renderizarLista(idElemento, listaKey) {
-    const container = document.getElementById(idElemento);
-    if (!container) return;
-    const dados = JSON.parse(localStorage.getItem(listaKey) || "[]");
-    container.innerHTML = dados.map(item => `
-      <div style="display:flex; justify-content:space-between; font-size:0.8rem; padding:8px 0; border-bottom:1px solid #eee; color:#475569;">
-        <span>${item.data} <small>${item.hora}</small></span>
-        <span style="font-weight:600; color: #6366f1;">R$ ${item.valor}</span>
-      </div>
-    `).join('');
-  }
+            // Cria o item visual na lista
+            lista.innerHTML += `
+                <div class="item ${item.cat === 'bike' ? 'bike' : 'casa'}">
+                    <div>
+                        <small>${item.data} às ${item.hora || ''}</small><br>
+                        <strong>${item.desc}</strong>
+                    </div>
+                    <div class="valor-txt" style="color: ${item.tipo === 'entrada' ? '#27ae60' : '#e74c3c'}">
+                        ${item.tipo === 'saida' ? '-' : '+'} R$ ${item.val.toFixed(2)}
+                    </div>
+                </div>
+            `;
+        });
 
-  function mostrarAvisoSalvo() {
-    if(statusText) {
-      statusText.classList.add('saved');
-      setTimeout(() => statusText.classList.remove('saved'), 1500);
+        // --- ATUALIZAÇÃO DO DASHBOARD ---
+        
+        // 1. Dívida Bike
+        const dividaBikeTotal = document.getElementById('dividaBike');
+        if (dividaBikeTotal) {
+            const dividaAtual = DIVIDA_INICIAL_BIKE - abatimentoBike;
+            dividaBikeTotal.innerText = `R$ ${Math.max(0, dividaAtual).toFixed(2)}`;
+        }
+
+        // 2. Saldo Geral
+        const saldoLivreTotal = document.getElementById('saldoLivre');
+        if (saldoLivreTotal) {
+            saldoLivreTotal.innerText = `R$ ${saldoLivre.toFixed(2)}`;
+            saldoLivreTotal.style.color = saldoLivre >= 0 ? '#2ecc71' : '#ff7675';
+        }
+
+        // 3. Meta e Barra de Progresso
+        const valorMetaTxt = document.getElementById('valorMetaTxt');
+        const progressoMeta = document.getElementById('progressoMeta');
+        
+        if (valorMetaTxt) valorMetaTxt.innerText = `R$ ${meta.toFixed(2)}`;
+        
+        if (progressoMeta) {
+            let percentual = (saldoLivre / meta) * 100;
+            // Garante que o progresso fique entre 0% e 100%
+            let width = Math.min(100, Math.max(0, percentual));
+            progressoMeta.style.width = `${width}%`;
+        }
     }
-  }
+
+    function mostrarAvisoSalvo() {
+        const aviso = document.getElementById('status-salvamento');
+        if (aviso) {
+            aviso.innerText = "Salvo!";
+            aviso.style.color = "#27ae60";
+            setTimeout(() => {
+                aviso.innerText = "Sincronizado";
+                aviso.style.color = "#bdc3c7";
+            }, 1500);
+        }
+    }
+
+    // Executa a renderização inicial
+    render();
 });
